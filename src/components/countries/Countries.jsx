@@ -11,7 +11,7 @@ const Countries = (props) => {
 
     useEffect(() => {
         fetchCountries();
-    },[props.country]);
+    },[props.country]); // eslint-disable-line react-hooks/exhaustive-deps
 
     async function fetchCountries(){
         try{

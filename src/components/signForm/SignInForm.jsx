@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import cl from "./SignForm.module.css";
 
 const SignInForm = ({getValue}) => {
-    const [value,setValue] = useState(``);
+    const [value,setValue] = useState('');
     const [posts,setPosts] = useState([
-        {id:1, caption: "Login", text:""},
-        {id:2, caption: "Password",text:""},
+        {id:1, caption: "Login", text:''},
+        {id:2, caption: "Password",text:''},
     ]);
 
 

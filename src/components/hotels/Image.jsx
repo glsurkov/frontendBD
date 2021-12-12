@@ -49,14 +49,15 @@ const Image = (props) => {
             console.log(e);
         }
     }
-    useEffect(()=>{
-        fetchImage();
-    },[props.images])
+    useEffect((e)=>{
+            fetchImage(e);
+    },[props.images]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className = {cl.container}>
             <img className = {cl.image_box} src = {image} />
-            <p onClick = {e => {deleteImage(e);props.fetchImages()}} className = {cl.delete}/>
+            { admin ?
+            <p onClick = {e => {deleteImage(e); props.fetchImages(e)}} className = {cl.delete}/> : null}
         </div>
     );
 };

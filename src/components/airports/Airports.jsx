@@ -8,9 +8,6 @@ const Airports = (props) => {
 
     const {token} = useContext(AuthContext);
     const[airports,setAirports] = useState([]);
-    useEffect(() => {
-        fetchAirports();
-    },[props.airport])
 
     async function fetchAirports(){
         try{
@@ -19,9 +16,24 @@ const Airports = (props) => {
             });
             setAirports(response.data)
         }catch(e){
-
+            console.log(e);
         }
     }
+
+    useEffect(() =>{
+        async function fetchAirports(){
+            try{
+                const response = await axios.get('/airports',{
+                    headers:{"Authorization":`Bearer ${token}`},
+                });
+                setAirports(response.data)
+            }catch(e){
+                console.log(e);
+            }
+        }
+        fetchAirports()
+    },[props.airport]) // eslint-disable-line react-hooks/exhaustive-deps
+
 
 
     return (

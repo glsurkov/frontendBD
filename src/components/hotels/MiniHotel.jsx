@@ -15,8 +15,8 @@ const MiniHotel = (props) => {
     const [images,setImages] = useState([])
 
     useEffect(() => {
-        fetchImages()
-    },[])
+            fetchImages()
+    },[filePath]) // eslint-disable-line react-hooks/exhaustive-deps
 
     async function fetchImages(){
         try{
@@ -38,7 +38,6 @@ const MiniHotel = (props) => {
 
 
     async function postPicture(e,hotel_id){
-        e.preventDefault();
         const formData = new FormData();
         formData.append('hotelimage',file)
         try{
@@ -115,7 +114,7 @@ const MiniHotel = (props) => {
                 {props.hotel["hotels.users_hotel.active"] === 0 ? <div>
                     <h2>Прикрепите фото места отдыха:</h2>
                     <input type = "file" onChange = {e => {setFile(e.target.files[0])}}/>
-                    <div onClick = {e => {postPicture(e,props.hotel['hotels.hotel_id']);fetchImages()}}>
+                    <div onClick = {e => {postPicture(e,props.hotel['hotels.hotel_id']);/*fetchImages()*/}}>
                         <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
                     </div>
                 </div> : null}

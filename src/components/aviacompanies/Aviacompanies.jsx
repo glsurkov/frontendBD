@@ -9,10 +9,6 @@ const Aviacompanies = (props) => {
     const {token} = useContext(AuthContext);
     const[aviacompanies,setAviacompanies] = useState([]);
 
-    useEffect(() => {
-        fetchAviacompanies();
-    },[props.aviacompany]);
-
     async function fetchAviacompanies(){
         try{
             const response = await axios.get('/aviacompanies',{
@@ -23,6 +19,10 @@ const Aviacompanies = (props) => {
             console.log(e);
         }
     }
+
+    useEffect(() => {
+        fetchAviacompanies()},[props.aviacompany]); // eslint-disable-line react-hooks/exhaustive-deps
+
 
 
     return (

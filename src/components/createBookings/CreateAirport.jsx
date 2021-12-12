@@ -6,9 +6,9 @@ import axios from "axios";
 
 const CreateAirport = () => {
 
-    const [name,setName] = useState()
-    const [country,setCountry] = useState()
-    const [city,setCity] = useState()
+    const [name,setName] = useState('')
+    const [country,setCountry] = useState('')
+    const [city,setCity] = useState('')
 
     const {token} = useContext(AuthContext)
 

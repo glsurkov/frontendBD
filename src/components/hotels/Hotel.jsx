@@ -4,14 +4,51 @@ import axios from "axios";
 import {AuthContext} from "../../context";
 import ModalWindow from "../modalWindow/ModalWindow";
 import Button from "../intro/Button";
+import cl2 from "../signForm/SignForm.module.css";
+import  cl3 from "../airports/Airport.module.css"
 
 const Hotel = (props) => {
 
     const {admin,token} = useContext(AuthContext);
 
-    const [modal,setModal] = useState(false)
-    const [inp1,setInp1] = useState(null);
-    const [inp2,setInp2] = useState(null);
+    const [modal,setModal] = useState(false);
+    const [modal2,setModal2] = useState(false);
+    const [inp1,setInp1] = useState('');
+    const [inp2,setInp2] = useState('');
+    const [country,setCountry] = useState(props.hotel.hotel_country);
+    const [price,setPrice] = useState(props.hotel.room_price);
+    const [rooms,setRooms] = useState(props.hotel.rooms_in_stock);
+    const [name,setName] = useState(props.hotel.hotel_name);
+    const [city,setCity] = useState(props.hotel.hotel_city);
+
+
+    async function updateHotel(event)
+    {
+        try{
+            event.preventDefault()
+            const response = await axios.put('/hotels',{
+                hotel_name:name,
+                room_price:price,
+                rooms_in_stock:rooms,
+                hotel_city:city,
+                hotel_country:country
+            },{
+                headers:{"Authorization":`Bearer ${token}`},
+                params:{
+                    hotel_id:props.hotel.hotel_id
+                }
+            })
+            console.log(response);
+        }catch(e)
+        {
+            console.log(e);
+            setName(props.hotel.hotel_name);
+            setPrice(props.hotel.room_price);
+            setRooms(props.hotel.rooms_in_stock);
+            setCity(props.hotel.hotel_city);
+            setCountry(props.hotel.hotel_country);
+        }
+    }
 
     async function bookHotel(event,id,price,inp1,inp2){
         try{
@@ -55,6 +92,10 @@ const Hotel = (props) => {
         setModal(state);
     }
 
+    const showModal2 = (state) => {
+        setModal2(state);
+    }
+
     return (
         <div>
             <div className = {cl.flight}>
@@ -81,6 +122,19 @@ const Hotel = (props) => {
                     ?
                     <div>
                         <p onClick = {(e) => {deleteHotel(e,props.hotel.hotel_id);props.fetchHotels(e)}} className = {cl.delete}/>
+                        <p onClick ={() => {showModal2(true)}} className = {cl3.update}/>
+                        <ModalWindow visible={modal2} setVisible={setModal2}>
+                            <div className = {cl2.SignForm}>
+                                <input className = {cl2.Input} value = {name} onChange = {(e) => {setName(e.target.value)}}/>
+                                <input className = {cl2.Input} value = {country} onChange = {(e) => {setCountry(e.target.value)}}/>
+                                <input className = {cl2.Input} value = {city} onChange = {(e) => {setCity(e.target.value)}}/>
+                                <input className = {cl2.Input} value = {price} onChange = {(e) => {setPrice(e.target.value)}}/>
+                                <input className = {cl2.Input} value = {rooms} onChange = {(e) => {setRooms(e.target.value)}}/>
+                                <div onClick = {(e) => {updateHotel(e);props.fetchHotels(e)}}>
+                                    <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
+                                </div>
+                            </div>
+                        </ModalWindow>
                     </div>
                     : null}
                 <ModalWindow visible={modal} setVisible={setModal}>

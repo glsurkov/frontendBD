@@ -17,6 +17,7 @@ const AppRouter = () => {
                     component = {route.component}
                     path = {route.path}
                     exact = {route.exact}
+                    key = {route.path}
                  />
                 )}
             <Redirect to='/userpage'/>
@@ -29,6 +30,7 @@ const AppRouter = () => {
                         component = {route.component}
                         path = {route.path}
                         exact = {route.exact}
+                        key = {route.path}
                     />
                     )}
             <Redirect to='/registerpage'/>

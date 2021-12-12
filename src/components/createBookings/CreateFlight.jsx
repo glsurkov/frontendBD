@@ -7,15 +7,15 @@ import axios from "axios";
 const CreateFlight = () => {
 
 
-    const [name,setName] = useState()
-    const [departure_date,setDeparture_date] = useState()
-    const [departure_time,setDeparture_time] = useState()
-    const [departure_airport_name,setDeparture_airport_name] = useState()
-    const [arrival_date,setArrival_date] = useState()
-    const [arrival_time,setArrival_time] = useState()
-    const [arrival_airport_name,setArrival_airport_name] = useState()
-    const [tickets_in_stock,setTickets_in_stock] = useState()
-    const [ticket_price,setTicket_price] = useState()
+    const [name,setName] = useState('')
+    const [departure_date,setDeparture_date] = useState('')
+    const [departure_time,setDeparture_time] = useState('')
+    const [departure_airport_name,setDeparture_airport_name] = useState('')
+    const [arrival_date,setArrival_date] = useState('')
+    const [arrival_time,setArrival_time] = useState('')
+    const [arrival_airport_name,setArrival_airport_name] = useState('')
+    const [tickets_in_stock,setTickets_in_stock] = useState('')
+    const [ticket_price,setTicket_price] = useState('')
 
     const {token} = useContext(AuthContext)
 

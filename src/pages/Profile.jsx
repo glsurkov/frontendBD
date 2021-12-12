@@ -26,9 +26,9 @@ const Profile = () => {
         }
     }
 
-    useEffect(()=>{
-       fetchUser();
-    },[])
+    useEffect(() => {
+        fetchUser()
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className = "intro2">

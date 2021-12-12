@@ -6,9 +6,9 @@ import {AuthContext} from "../../context";
 
 const CreateCountry = () => {
 
-    const [name,setName] = useState()
-    const [population,setPopulation] = useState()
-    const [city,setCity] = useState()
+    const [name,setName] = useState('')
+    const [population,setPopulation] = useState('')
+    const [city,setCity] = useState('')
 
     const {token} = useContext(AuthContext)
 

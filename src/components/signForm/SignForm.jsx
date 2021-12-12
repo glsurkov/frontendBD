@@ -28,13 +28,9 @@ const SignForm = ({type}) => {
         try{
             event.preventDefault();
             const response = await axios.post('/auth/registration', form)
-            console.log(response);
             if (response)
             {
-                setToken(response.data);
-                console.log(token);
-                setIsAuth(true);
-                localStorage.setItem('auth','true');
+
             }
         }catch(e)
         {

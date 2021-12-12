@@ -28,8 +28,13 @@
     position:relative;
 }
 
-p.delete:after {
+p.delete:after{
     content:'\2716';
     margin-left: 6px;
     cursor:pointer;
+}
+
+p.update:after{
+    content:'\270E';
+    cursor:pointer
 }

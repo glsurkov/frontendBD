@@ -6,7 +6,6 @@ import '../styles/style.css';
 import Flights from "../components/flights/Flights";
 import axios from 'axios';
 import Hotels from "../components/hotels/Hotels";
-import ModalWindow from "../components/modalWindow/ModalWindow";
 import FilterFlights from "../components/filter/FilterFlights";
 import FilterHotels from "../components/filter/FilterHotels";
 import {Link} from "react-router-dom";
@@ -21,14 +20,14 @@ const UserPage = () => {
         if (localStorage.getItem('token')){
             setToken(localStorage.getItem('token'))
         }
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
     useEffect( () => {
         if(localStorage.getItem('admin'))
         {
             setIsAdmin(true);
         }
-    },[])
-    const {token,setToken,isAuth,setIsAuth,admin,setIsAdmin} = useContext(AuthContext);
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
+    const {token,setToken,setIsAuth,admin,setIsAdmin} = useContext(AuthContext);
     const [flights, setFlights] = useState([]);
     const [hotels,setHotels] = useState([]);
     const [flights_hotels,setFlights_Hotels] = useState(null);
@@ -108,7 +107,7 @@ const UserPage = () => {
                     <Button button = {{title:"Logout", class:"btn btn4", click: ()=>{}, showText:()=>{}}}/>
                 </div>
             </div>
-            <Flight_Hotels_NAV fetchFlights = {fetchFlights} fetchHotels = {fetchHotels}/>
+            <Flight_Hotels_NAV fetchFlights = {fetchFlights} fetchHotels = {fetchHotels} />
             {!flights_hotels ? <Flights flights = {flights}/> : <Hotels hotels = {hotels}/>}
             {!flights_hotels ? <FilterFlights fetchFlights = {fetchFlights}/> : <FilterHotels fetchHotels = {fetchHotels}/>}
 
