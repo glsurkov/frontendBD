@@ -9,6 +9,8 @@ import cl3 from "../airports/Airport.module.css";
 
 const Flight = (props) => {
 
+    const [sent,setSent] = useState(false);
+    const [error2,setError] = useState(undefined);
     const {token,admin} = useContext(AuthContext);
     const [modal,setModal] = useState(false);
     const [company,setCompany] = useState(props.flight.aviacompany.company_name);
@@ -42,6 +44,8 @@ const Flight = (props) => {
                 }
             })
             console.log(response);
+            setSent(true);
+            return response
         }catch(e)
         {
             console.log(e);
@@ -53,7 +57,8 @@ const Flight = (props) => {
             setArr_time(props.flight.arrival_time);
             setArr_airport(props.flight.arrival_airport.airport_name);
             setPrice(props.flight.ticket_price);
-            setTickets(props.flight.tickets_in_stock)
+            setTickets(props.flight.tickets_in_stock);
+            setSent(true);
         }
     }
 
@@ -115,6 +120,9 @@ const Flight = (props) => {
                         <div>
                             Вылет из : {props.flight.departure_airport.airport_name}
                         </div>
+                        <div>
+                            Город: {props.flight.departure_airport.airport_city}
+                        </div>
                     </div>
                     <div className={cl.card}>
                         <div>
@@ -124,6 +132,9 @@ const Flight = (props) => {
                         </div>
                         <div>
                             Прилет в : {props.flight.arrival_airport.airport_name}
+                        </div>
+                        <div>
+                            Город: {props.flight.arrival_airport.airport_city}
                         </div>
                     </div>
                     <div className={cl.card}>
@@ -148,7 +159,12 @@ const Flight = (props) => {
                                     <input className = {cl2.Input} value = {arr_airport} onChange = {(e) => {setArr_airport(e.target.value)}}/>
                                     <input className = {cl2.Input} value = {price} onChange = {(e) => {setPrice(e.target.value)}}/>
                                     <input className = {cl2.Input} value = {tickets} onChange = {(e) => {setTickets(e.target.value)}}/>
-                                    <div onClick = {(e) => {updateFlight(e);props.fetchFlights()}}>
+                                    {
+                                        sent ?  <div> {
+                                            !error2 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Данные успешно cохранены </div>
+                                        } </div> : null
+                                    }
+                                    <div onClick = {(e) => {updateFlight(e).then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false);props.fetchFlights()}}>
                                         <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
                                     </div>
                                 </div>

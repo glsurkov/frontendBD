@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState,useEffect} from 'react';
 import cl from "../signForm/SignForm.module.css";
 import Button from "../intro/Button";
 import {AuthContext} from "../../context";
@@ -6,7 +6,8 @@ import axios from "axios";
 
 const CreateFlight = () => {
 
-
+    const [sent,setSent] = useState(false);
+    const [error2,setError] = useState(undefined);
     const [name,setName] = useState('')
     const [departure_date,setDeparture_date] = useState('')
     const [departure_time,setDeparture_time] = useState('')
@@ -32,7 +33,7 @@ const CreateFlight = () => {
                 tickets_in_stock:tickets_in_stock,
                 ticket_price:ticket_price
             },{headers:{"Authorization":`Bearer ${token}`}})
-            console.log(response);
+            console.log(response.status)
             setTicket_price('');
             setName('');
             setTickets_in_stock('');
@@ -42,9 +43,12 @@ const CreateFlight = () => {
             setArrival_time('');
             setDeparture_date('');
             setDeparture_time('');
+            setSent(true);
+            return response
         }catch(e)
         {
-            console.log(e);
+            console.log(e.status);
+            setSent(true);
         }
     }
 
@@ -60,7 +64,12 @@ const CreateFlight = () => {
             <input value = {arrival_airport_name} onChange = {e => setArrival_airport_name(e.target.value)} className = {cl.Input} placeholder="Аэропорт прилета"/>
             <input value = {tickets_in_stock} onChange = {e => setTickets_in_stock(e.target.value)} className = {cl.Input} placeholder="Количество билетов"/>
             <input value = {ticket_price} onChange = {e => setTicket_price(e.target.value)} className = {cl.Input} placeholder="Цена билета"/>
-            <div onClick = {addFlight}>
+            {
+               sent ?  <div> {
+                   !error2 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Данные успешно добавлены </div>
+                    } </div> : null
+             }
+            <div onClick = {() => {addFlight().then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false)}}>
                 <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
             </div>
         </div>

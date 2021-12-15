@@ -6,6 +6,8 @@ import axios from "axios";
 
 const CreateHotel = () => {
 
+    const [sent,setSent] = useState(false);
+    const [error2,setError] = useState(undefined)
     const [name,setName] = useState()
     const [country,setCountry] = useState()
     const [city,setCity] = useState()
@@ -29,9 +31,12 @@ const CreateHotel = () => {
             setCountry('');
             setNumbers('');
             setPrice('');
+            setSent(true);
+            return response
         }catch(e)
         {
             console.log(e);
+            setSent(true);
         }
     }
 
@@ -42,7 +47,12 @@ const CreateHotel = () => {
             <input value = {city} onChange = {e => setCity(e.target.value)} className = {cl.Input} placeholder="Город"/>
             <input value = {price} onChange = {e => setPrice(e.target.value)} className = {cl.Input} placeholder="Цена номера"/>
             <input value = {numbers} onChange = {e => setNumbers(e.target.value)} className = {cl.Input} placeholder="Количество номеров"/>
-            <div onClick = {addHotel}>
+            {
+                sent ?  <div> {
+                    !error2 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Данные успешно добавлены </div>
+                } </div> : null
+            }
+            <div onClick = {() => {addHotel().then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false)}}>
                 <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
             </div>
         </div>

@@ -8,6 +8,8 @@ import Images from "./Images";
 
 const MiniHotel = (props) => {
 
+    const [error2,setError] = useState(undefined);
+    const [sent,setSent] = useState(false);
     const {token} = useContext(AuthContext);
     const [modal,setModal] = useState(false);
     const [file,setFile] = useState('');
@@ -38,9 +40,10 @@ const MiniHotel = (props) => {
 
 
     async function postPicture(e,hotel_id){
+        try{
         const formData = new FormData();
         formData.append('hotelimage',file)
-        try{
+
           const response = await axios.post('/hotels/upload',formData,{
               headers:{
                   'Content-type':'multipart/form-data',
@@ -52,9 +55,12 @@ const MiniHotel = (props) => {
           })
             console.log(response);
             setFilepath(response.data.path);
+            setSent(true);
+            return response;
         }catch(e)
         {
             console.log(e);
+            setSent(true);
         }
     }
 
@@ -114,7 +120,12 @@ const MiniHotel = (props) => {
                 {props.hotel["hotels.users_hotel.active"] === 0 ? <div>
                     <h2>Прикрепите фото места отдыха:</h2>
                     <input type = "file" onChange = {e => {setFile(e.target.files[0])}}/>
-                    <div onClick = {e => {postPicture(e,props.hotel['hotels.hotel_id']);/*fetchImages()*/}}>
+                    {
+                        sent ?  <div> {
+                            !error2 ? <div className = 'error'>Ошибка! Возможно вы отправили не фото</div> : <div className = 'success'> Фотография успешно добавлена </div>
+                        } </div> : null
+                    }
+                    <div onClick = {e => {postPicture(e,props.hotel['hotels.hotel_id']).then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false);/*fetchImages()*/}}>
                         <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
                     </div>
                 </div> : null}

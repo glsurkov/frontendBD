@@ -11,6 +11,8 @@ import MiniHotels from '../hotels/MiniHotels'
 
 const User = (props) => {
 
+    const [error2,setError] = useState(undefined);
+    const [sent,setSent] = useState(false);
     const [modal,setModal] = useState(false);
     const [inp,setInp] = useState('');
 
@@ -83,9 +85,12 @@ const User = (props) => {
             })
             console.log(response);
             setInp('');
+            setSent(true);
+            return response
         }catch(e)
         {
             console.log('ERROR');
+            setSent(true);
         }
     }
 
@@ -102,7 +107,12 @@ const User = (props) => {
             <ModalWindow visible = {modal} setVisible = {setModal}>
                 <div className = {cl.balance_form}>
                 <input value = {inp} onChange = {e => setInp(e.target.value)} placeholder='Введите сумму'/>
-                    <div onClick = {(e) => {addBalance(e,inp);props.fetchUser()}}>
+                    {
+                        sent ?  <div> {
+                            !error2 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Данные успешно добавлены </div>
+                        } </div> : null
+                    }
+                    <div onClick = {(e) => {addBalance(e,inp).then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false);props.fetchUser()}}>
                         <Button button = {{title:"Submit",class:"btn btn3", click:()=>{},showText:()=>{}}}/>
                     </div>
                 </div>
@@ -120,10 +130,6 @@ const User = (props) => {
             <div  className = {`${cl.user_info}`}>
                 {props.user.balance}
                 <p onClick = {() => showModal(true)} className={cl.l}/>
-            </div>
-            <h2>Номер</h2>
-            <div>
-
             </div>
             <h2>Полеты</h2>
             <div className = {cl.parent_arrow}>

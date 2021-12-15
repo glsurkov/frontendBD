@@ -8,6 +8,8 @@ import Button from "../intro/Button";
 
 const Aviacompany = (props) => {
 
+    const [sent,setSent] = useState(false);
+    const [error2,setError] = useState(undefined);
     const {admin,token} = useContext(AuthContext);
     const [modal,setModal] = useState(false);
     const [name,setName] = useState(props.aviacompany.company_name);
@@ -26,11 +28,14 @@ const Aviacompany = (props) => {
                 }
             })
             console.log(response);
+            setSent(true);
+            return response
         }catch(e)
         {
             console.log(e);
             setName(props.aviacompany.company_name);
             setPhone(props.aviacompany.company_phone);
+            setSent(true);
         }
     }
 
@@ -77,7 +82,12 @@ const Aviacompany = (props) => {
                             <div className = {cl2.SignForm}>
                                 <input className = {cl2.Input} value = {name} onChange = {(e) => {setName(e.target.value)}}/>
                                 <input className = {cl2.Input} value = {phone} onChange = {(e) => {setPhone(e.target.value)}}/>
-                                <div onClick = {(e) => {updateAviacompany(e);props.fetchAviacompanies()}}>
+                                {
+                                    sent ?  <div> {
+                                        !error2 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Данные успешно cохранены </div>
+                                    } </div> : null
+                                }
+                                <div onClick = {(e) => {updateAviacompany(e).then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false);props.fetchAviacompanies()}}>
                                     <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
                                 </div>
                             </div>

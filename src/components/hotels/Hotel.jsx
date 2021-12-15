@@ -11,6 +11,10 @@ const Hotel = (props) => {
 
     const {admin,token} = useContext(AuthContext);
 
+    const [sent,setSent] = useState(false);
+    const [error2,setError] = useState(undefined);
+    const [sent2,setSent2] = useState(false);
+    const [error3,setError3] = useState(undefined)
     const [modal,setModal] = useState(false);
     const [modal2,setModal2] = useState(false);
     const [inp1,setInp1] = useState('');
@@ -39,6 +43,8 @@ const Hotel = (props) => {
                 }
             })
             console.log(response);
+            setSent2(true)
+            return response
         }catch(e)
         {
             console.log(e);
@@ -47,6 +53,7 @@ const Hotel = (props) => {
             setRooms(props.hotel.rooms_in_stock);
             setCity(props.hotel.hotel_city);
             setCountry(props.hotel.hotel_country);
+            setSent2(true);
         }
     }
 
@@ -63,11 +70,14 @@ const Hotel = (props) => {
                     headers:{'Authorization':`Bearer ${token}`}
                 });
             console.log(response);
-            setInp1(null);
-            setInp2(null);
+            setInp1('');
+            setInp2('');
+            setSent(true);
+            return response
         }catch(e)
         {
             console.log(e);
+            setSent(true)
         }
     }
 
@@ -130,7 +140,12 @@ const Hotel = (props) => {
                                 <input className = {cl2.Input} value = {city} onChange = {(e) => {setCity(e.target.value)}}/>
                                 <input className = {cl2.Input} value = {price} onChange = {(e) => {setPrice(e.target.value)}}/>
                                 <input className = {cl2.Input} value = {rooms} onChange = {(e) => {setRooms(e.target.value)}}/>
-                                <div onClick = {(e) => {updateHotel(e);props.fetchHotels(e)}}>
+                                {
+                                    sent2 ?  <div> {
+                                        !error3 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Данные успешно cохранены </div>
+                                    } </div> : null
+                                }
+                                <div onClick = {(e) => {updateHotel(e).then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError3(response)});setSent2(false);props.fetchHotels(e)}}>
                                     <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
                                 </div>
                             </div>
@@ -142,7 +157,12 @@ const Hotel = (props) => {
                     <input value = {inp1} onChange = {(e) => setInp1(e.target.value)} type='date'/>
                     <h3>Дата выезда</h3>
                     <input value = {inp2} onChange = {(e) => setInp2(e.target.value)} type='date'/>
-                    <div onClick = {(e) => {bookHotel(e,props.hotel.hotel_id,props.hotel.room_price,inp1,inp2)}}>
+                    {
+                        sent ?  <div> {
+                            !error2 ? <div className = 'error'>Ошибка! Проверьте введенные данные</div> : <div className = 'success'> Номер успешно забронирован </div>
+                        } </div> : null
+                    }
+                    <div onClick = {(e) => {bookHotel(e,props.hotel.hotel_id,props.hotel.room_price,inp1,inp2).then(res =>{ let response; if(res){response = res.status}else{response = undefined} setError(response)});setSent(false)}}>
                         <Button button = {{title:"Submit", class:"btn btn3", click: ()=>{}, showText:()=>{}}}/>
                     </div>
                 </ModalWindow>
